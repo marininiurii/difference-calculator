@@ -15,7 +15,7 @@ const makeLeaf = (key, valueObject1, valueObject2) => {
     return `  + ${key}: ${valueObject2}\n`;
   }
   if (valueObject1 === valueObject2) {
-    return `   ${key}: ${valueObject1}\n`;
+    return `    ${key}: ${valueObject1}\n`;
   }
   if (valueObject1 !== valueObject2) {
     return `  - ${key}: ${valueObject1}\n  + ${key}: ${valueObject2}\n`;

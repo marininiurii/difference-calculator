@@ -3,10 +3,11 @@ on: push
 jobs:
   
   build:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     strategy:
+      # Node versions list
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        node-version: [18.x]
     steps: 
       - uses: actions/checkout@v3
       - run: make install

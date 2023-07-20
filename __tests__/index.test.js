@@ -5,17 +5,15 @@ import genDiff from '../src/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
+const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8');
 
 test('gendiffJSON', () => {
-  const filePath1 = path.join(__dirname, '..', '__fixtures__', 'file1.json');
-  const filePath2 = path.join(__dirname, '..', '__fixtures__', 'file2.json');
-  const expectedFilePath = path.join(__dirname, '..', '__fixtures__', 'expected_file_stylish.txt');
-  expect(genDiff(filePath1, filePath2)).toEqual(fs.readFileSync(expectedFilePath, 'utf8'));
+  expect(genDiff(getFixturePath('file1.json'), getFixturePath('file2.json')))
+    .toEqual(readFile('expected_file_stylish.txt'));
 });
 
 test('gendiffYAML', () => {
-  const filePath1 = path.join(__dirname, '..', '__fixtures__', 'file1.yaml');
-  const filePath2 = path.join(__dirname, '..', '__fixtures__', 'file2.yaml');
-  const expectedFilePath = path.join(__dirname, '..', '__fixtures__', 'expected_file_stylish.txt');
-  expect(genDiff(filePath1, filePath2)).toEqual(fs.readFileSync(expectedFilePath, 'utf8'));
+  expect(genDiff(getFixturePath('file1.yaml'), getFixturePath('file2.yaml')))
+    .toEqual(readFile('expected_file_stylish.txt'));
 });

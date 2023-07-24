@@ -1,20 +1,14 @@
-import _ from 'lodash';
+const INDICATORS = { added: '+ ', deleted: '- ', unchanged: '  ' };
+const TAB = '  ';
 
-const stringify = (val, replacer = ' ', spacesCount = 1, level = 0) => {
-  if (!_.isPlainObject(val) || val === null) {
-    return String(val);
-  }
-  const indent = replacer.repeat(spacesCount).repeat(level);
-  const result = Object.keys(val)
-    .map((key) => {
-      const value = val[key];
-      const recursionResult = stringify(value, replacer, spacesCount, level + 1);
-      const nestedIndent = replacer.repeat(spacesCount).repeat(level + 1);
-      const makeTemplate = `${nestedIndent}${key}: ${recursionResult}`;
-      return makeTemplate;
-    })
-    .join('\n');
-  return `{\n${result}\n${indent}}`;
+const makeStylish = (tree, level = 0) => {
+  const stylishTree = tree.reduce((acc, { key, value, status }) => {
+    if (Array.isArray(value)) {
+      return `${acc}${TAB.repeat(level + 1)}${INDICATORS[status]}${key}: ${makeStylish(value, level + 2)}\n`;
+    }
+    return `${acc}${TAB.repeat(level + 1)}${INDICATORS[status]}${key}: ${value}\n`;
+  }, '');
+  return `{\n${stylishTree}${TAB.repeat(level)}}`;
 };
 
-export default stringify;
+export default makeStylish;

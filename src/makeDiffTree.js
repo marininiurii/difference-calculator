@@ -8,27 +8,42 @@ const getUnionKeys = (data1, data2) => {
 };
 
 const makeDiffTree = (obj1, obj2) => {
+  const makeLeaf = (key, valueObject1, valueObject2) => {
+    if (valueObject2 === undefined) {
+      if (_.isObject(valueObject1)) {
+        return [{ key, value: makeDiffTree(valueObject1, valueObject1), status: 'deleted' }];
+      }
+      return [{ key, value: valueObject1, status: 'deleted' }]; // isDeleted
+    }
+    if (valueObject1 === undefined) {
+      if (_.isObject(valueObject2)) {
+        return [{ key, value: makeDiffTree(valueObject2, valueObject2), status: 'deleted' }];
+      }
+      return [{ key, value: valueObject2, status: 'added' }]; // isAdded
+    }
+    if (_.isObject(valueObject1) && _.isObject(valueObject2)) {
+      return [{ key, value: makeDiffTree(valueObject1, valueObject2), status: 'unchanged' }];
+    }
+    if (valueObject1 === valueObject2) {
+      return [{ key, value: valueObject1, status: 'unchanged' }]; // unchanged
+    }
+    if (_.isObject(valueObject1)) {
+      return [{ key, value: makeDiffTree(valueObject1, valueObject1), status: 'deleted' },
+        { key, value: valueObject2, status: 'added' }];
+    }
+    if (_.isObject(valueObject2)) {
+      return [{ key, value: valueObject2, status: 'deleted' },
+        { key, value: makeDiffTree(valueObject2, valueObject2), status: 'added' }];
+    }
+    return [
+      { key, value: valueObject1, status: 'deleted' },
+      { key, value: valueObject2, status: 'added' },
+    ]; // changed
+  };
   const getKeys = getUnionKeys(obj1, obj2);
-  return getKeys.map((key) => {
-    if (_.isObject(obj1[key]) && _.isObject(obj2[key])) {
-      return { key, value: makeDiffTree(obj1[key], obj2[key]), status: 'nested' };
-    }
-    if (!_.has(obj1, key)) {
-      return { key, value: obj2[key], status: 'added' };
-    }
-    if (!_.has(obj2, key)) {
-      return { key, value: obj1[key], status: 'deleted' };
-    }
-    if (obj1[key] !== obj2[key]) {
-      return {
-        key,
-        oldValue: obj1[key],
-        newValue: obj2[key],
-        status: 'changed',
-      };
-    }
-    return { key, value: obj1[key], status: 'unchanged' };
-  });
+  const DiffTree = getKeys
+    .reduce((acc, key) => [...acc, ...makeLeaf(key, obj1[key], obj2[key])], []);
+  return DiffTree;
 };
 
 export default makeDiffTree;

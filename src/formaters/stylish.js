@@ -1,35 +1,48 @@
 import _ from 'lodash';
 
-const INDICATORS = { added: '+ ', deleted: '- ', unchanged: '  ' };
-const TAB = '  ';
-const stylishObject = (object, level = 0) => {
-  const entries = Object.entries(object);
-  const rows = entries.reduce((acc, [key, value]) => {
-    if (_.isObject(value)) {
-      return `${acc}${TAB.repeat(level + 2)}${key}: ${stylishObject(value, level + 2)}\n`;
-    }
-    return `${acc}${TAB.repeat(level + 2)}${key}: ${value}\n`;
-  }, '');
-  return `{\n${rows}${TAB.repeat(level)}}`;
+const getValue = (propValue, depth = 0) => {
+  const indent = '    '.repeat(depth);
+
+  if (!_.isObject(propValue)) {
+    return propValue;
+  }
+  const entries = Object.entries(propValue);
+  const result = entries.map(([key, value]) => `    ${indent}${key}: ${getValue(value, depth + 1)}`);
+
+  return [
+    '{',
+    ...result,
+    `${indent}}`,
+  ].join('\n');
 };
 
-const stylish = (tree, level = 0) => {
-  const stylishTree = tree.reduce((acc, { key, value, status }) => {
-    if (Array.isArray(value)) {
-      return `${acc}${TAB.repeat(level + 1)}${
-        INDICATORS[status]
-      }${key}: ${stylish(value, level + 2)}\n`;
+const makeStylish = (tree, depth = 0) => {
+  const indent = '    '.repeat(depth);
+  const result = tree.flatMap((node) => {
+    switch (node.status) {
+      case 'changed':
+        return [
+          `  ${indent}- ${node.key}: ${getValue(node.oldValue, depth + 1)}`,
+          `  ${indent}+ ${node.key}: ${getValue(node.newValue, depth + 1)}`,
+        ];
+      case 'unchanged':
+        return `  ${indent}  ${node.key}: ${getValue(node.value, depth + 1)}`;
+      case 'deleted':
+        return `  ${indent}- ${node.key}: ${getValue(node.value, depth + 1)}`;
+      case 'added':
+        return `  ${indent}+ ${node.key}: ${getValue(node.value, depth + 1)}`;
+      case 'nested':
+        return `  ${indent}  ${node.key}: ${makeStylish(node.value, depth + 1)}`;
+      default:
+        throw new Error('Unknown node.type');
     }
-    if (_.isObject(value)) {
-      return `${acc}${TAB.repeat(level + 1)}${
-        INDICATORS[status]
-      }${key}: ${stylishObject(value, level + 2)}\n`;
-    }
-    return `${acc}${TAB.repeat(level + 1)}${
-      INDICATORS[status]
-    }${key}: ${value}\n`;
-  }, '');
-  return `{\n${stylishTree}${TAB.repeat(level)}}`;
+  });
+
+  return [
+    '{',
+    ...result,
+    `${indent}}`,
+  ].join('\n');
 };
 
-export default stylish;
+export default makeStylish;

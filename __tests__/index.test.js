@@ -8,12 +8,22 @@ const __dirname = path.dirname(__filename);
 const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
 const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8');
 
-test('gendiffJSON', () => {
+test('JSON_stylish', () => {
   expect(genDiff(getFixturePath('file1.json'), getFixturePath('file2.json')))
-    .toEqual(readFile('expected_file_stylish.txt'));
+    .toEqual(readFile('expectedStylish.txt'));
 });
 
-test('gendiffYAML', () => {
+test('YAML_stylish', () => {
   expect(genDiff(getFixturePath('file1.yaml'), getFixturePath('file2.yaml')))
-    .toEqual(readFile('expected_file_stylish.txt'));
+    .toEqual(readFile('expectedStylish.txt'));
+});
+
+test('JSON_plain', () => {
+  expect(genDiff(getFixturePath('file1.json'), getFixturePath('file2.json'), 'plain'))
+    .toEqual(readFile('expectedPlain.txt'));
+});
+
+test('YAML_plain', () => {
+  expect(genDiff(getFixturePath('file1.yaml'), getFixturePath('file2.yaml'), 'plain'))
+    .toEqual(readFile('expectedPlain.txt'));
 });

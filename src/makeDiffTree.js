@@ -1,36 +1,25 @@
 import _ from 'lodash';
 
-const getUnionKeys = (data1, data2) => {
-  const keysData1 = Object.keys(data1);
-  const keysData2 = Object.keys(data2);
-  const sortUnionKeys = _.sortBy(_.union(keysData1, keysData2));
-  return sortUnionKeys;
-};
+const getUnionKeys = (object1, object2) => _.sortBy(_.union(_.keys(object1), _.keys(object2)));
 
 const makeDiffTree = (obj1, obj2) => {
-  const makeLeaf = (key, valueObject1, valueObject2) => {
-    if (valueObject2 === undefined) {
-      return [{ key, value: valueObject1, status: 'deleted' }];
+  const unionKeys = getUnionKeys(obj1, obj2);
+  return unionKeys.reduce((acc, key) => {
+    if (_.isObject(obj1[key]) && _.isObject(obj2[key])) {
+      acc.push({ key, value: makeDiffTree(obj1[key], obj2[key]), status: 'nested' });
+    } else if (!_.has(obj1, key)) {
+      acc.push({ key, value: obj2[key], status: 'added' });
+    } else if (!_.has(obj2, key)) {
+      acc.push({ key, value: obj1[key], status: 'deleted' });
+    } else if (obj1[key] === obj2[key]) {
+      acc.push({ key, value: obj1[key], status: 'unchanged' });
+    } else {
+      acc.push({
+        key, oldValue: obj1[key], newValue: obj2[key], status: 'changed',
+      });
     }
-    if (valueObject1 === undefined) {
-      return [{ key, value: valueObject2, status: 'added' }];
-    }
-    if (_.isObject(valueObject1) && _.isObject(valueObject2)) {
-      return [{ key, value: makeDiffTree(valueObject1, valueObject2), status: 'unchanged' }];
-    }
-    if (valueObject1 === valueObject2) {
-      return [{ key, value: valueObject1, status: 'unchanged' }];
-    }
-    return [
-      { key, value: valueObject1, status: 'deleted' },
-      { key, value: valueObject2, status: 'added' },
-    ];
-  };
-
-  const getKeys = getUnionKeys(obj1, obj2);
-  const diffTree = getKeys
-    .reduce((acc, key) => [...acc, ...makeLeaf(key, obj1[key], obj2[key])], []);
-  return diffTree;
+    return acc;
+  }, []);
 };
 
 export default makeDiffTree;

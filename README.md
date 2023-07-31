@@ -28,4 +28,7 @@ $ gendiff -h
   <li><p><a href="https://asciinema.org/a/S02R7gb1kHnS4a8lyocVLCa0t">Сравнение плоских файлов (JSON)</a></p></li>
   <li><p><a href="https://asciinema.org/a/sTmIwo6jfk4U9Mr6yASxl1ECr">Сравнение плоских файлов (YAML)</a></p></li>
   <li><p><a href="https://asciinema.org/a/Zzx8toBB7QFiWs2Ss8MWXgc5w">Рекурсивное сравнение (JSON)</a></p></li>
+  <li><p><a href="https://asciinema.org/a/boCAmjX5maTWXKsMVruDMoAol">Пример вывода в формате Plain</a></p></li>
 </ul>
+
+

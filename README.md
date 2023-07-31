@@ -4,31 +4,40 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/0c7372bc75fc5eb1225f/maintainability)](https://codeclimate.com/github/marininiurii/frontend-project-46/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/0c7372bc75fc5eb1225f/test_coverage)](https://codeclimate.com/github/marininiurii/frontend-project-46/test_coverage)
 
-## Установка
+### DIFFERENCE CALCULATOR
 
-* Клонируйте проект
+"Difference Calculator" is a program that determines the difference between two data structures. A similar mechanism is used when outputting tests or when automatically tracking changes in configuration files.
+
+Utility features:
+• Support for different input formats: yaml, json
+
+• Report generation in the form of plain text, stylish and json
+
+## installation
+
+* Сlone the project
 ```
 $ git clone 
 ```
-* Установите пакет(может потребоваться sudo)
+* Install the package (may require sudo)
 ```
 $ make install
 ```
 ```
 $ make link
 ```
-* Вывод справочной информации по утилите
+* Help information for the utility
 ```
 $ gendiff -h 
 ```
 
-## Пример использования
+## Usage example
 
 <ul>
-  <li><p><a href="https://asciinema.org/a/S02R7gb1kHnS4a8lyocVLCa0t">Сравнение плоских файлов (JSON)</a></p></li>
-  <li><p><a href="https://asciinema.org/a/sTmIwo6jfk4U9Mr6yASxl1ECr">Сравнение плоских файлов (YAML)</a></p></li>
-  <li><p><a href="https://asciinema.org/a/Zzx8toBB7QFiWs2Ss8MWXgc5w">Рекурсивное сравнение (JSON)</a></p></li>
-  <li><p><a href="https://asciinema.org/a/boCAmjX5maTWXKsMVruDMoAol">Пример вывода в формате Plain</a></p></li>
+  <li><p><a href="https://asciinema.org/a/S02R7gb1kHnS4a8lyocVLCa0t">Example lat file comparison (JSON)</a></p></li>
+  <li><p><a href="https://asciinema.org/a/sTmIwo6jfk4U9Mr6yASxl1ECr">Example stylish formatter with nested structures (YAML)</a></p></li>
+  <li><p><a href="https://asciinema.org/a/Zzx8toBB7QFiWs2Ss8MWXgc5w">Example stylish formatter with nested structures (JSON)</a></p></li>
+  <li><p><a href="https://asciinema.org/a/boCAmjX5maTWXKsMVruDMoAol">Example plain formatter</a></p></li>
 </ul>
 
 

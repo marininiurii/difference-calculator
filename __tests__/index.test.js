@@ -27,3 +27,13 @@ test('YAML_plain', () => {
   expect(genDiff(getFixturePath('file1.yaml'), getFixturePath('file2.yaml'), 'plain'))
     .toEqual(readFile('expectedPlain.txt'));
 });
+
+test('JSON_json', () => {
+  expect(genDiff(getFixturePath('file1.json'), getFixturePath('file2.json'), 'json'))
+    .toEqual(readFile('expectedJson.txt'));
+});
+
+test('YAML_json', () => {
+  expect(genDiff(getFixturePath('file1.yaml'), getFixturePath('file2.yaml'), 'json'))
+    .toEqual(readFile('expectedJson.txt'));
+});

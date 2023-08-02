@@ -1,13 +1,15 @@
 import _ from 'lodash';
 
+const TAB = '    ';
+
 const getValue = (propValue, depth = 0) => {
-  const indent = '    '.repeat(depth);
+  const indent = TAB.repeat(depth);
 
   if (!_.isObject(propValue)) {
     return propValue;
   }
   const entries = Object.entries(propValue);
-  const result = entries.map(([key, value]) => `    ${indent}${key}: ${getValue(value, depth + 1)}`);
+  const result = entries.map(([key, value]) => `${TAB}${indent}${key}: ${getValue(value, depth + 1)}`);
 
   return [
     '{',
@@ -17,7 +19,7 @@ const getValue = (propValue, depth = 0) => {
 };
 
 const makeStylish = (tree, depth = 0) => {
-  const indent = '    '.repeat(depth);
+  const indent = TAB.repeat(depth);
   const result = tree.flatMap((node) => {
     switch (node.status) {
       case 'changed':

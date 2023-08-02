@@ -6,10 +6,21 @@ import parsers from './parsers.js';
 import formatDefin from './formaters/index.js';
 
 const genDiff = (filepath1, filepath2, formatName = 'stylish') => {
-  const format = path.extname(filepath1);
-  const makeObject1 = parsers(fs.readFileSync(path.resolve(process.cwd(), filepath1), 'utf-8'), format);
-  const makeObject2 = parsers(fs.readFileSync(path.resolve(process.cwd(), filepath2), 'utf-8'), format);
-  const tree = makeDiffTree(makeObject1, makeObject2);
+  const format = path.extname(filepath1).substring(1);
+
+  const getPathForFile1 = path.resolve(process.cwd(), filepath1);
+  const getPathForFile2 = path.resolve(process.cwd(), filepath2);
+
+  const readFile1 = fs.readFileSync(getPathForFile1, 'utf-8');
+  const readFile2 = fs.readFileSync(getPathForFile2, 'utf-8');
+
+  const parseFile1 = parsers(readFile1, format);
+  const parseFile2 = parsers(readFile2, format);
+
+  const object1 = parseFile1;
+  const object2 = parseFile2;
+
+  const tree = makeDiffTree(object1, object2);
   return formatDefin(tree, formatName);
 };
 

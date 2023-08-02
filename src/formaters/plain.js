@@ -4,10 +4,10 @@ const getValue = (value) => {
   if (_.isObject(value)) {
     return '[complex value]';
   }
-  if (_.isBoolean(value) || _.isNumber(value) || _.isNull(value)) {
-    return value;
+  if (_.isString(value)) {
+    return `'${value}'`;
   }
-  return `'${value}'`;
+  return String(value);
 };
 
 const makePlain = (tree, path = '') => {

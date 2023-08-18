@@ -36,7 +36,7 @@ const makeStylish = (tree, depth = 0) => {
       case 'nested':
         return `  ${indent}  ${node.key}: ${makeStylish(node.value, depth + 1)}`;
       default:
-        throw new Error('Unknown node.type');
+        throw new Error('Unknown node.status');
     }
   });
 
